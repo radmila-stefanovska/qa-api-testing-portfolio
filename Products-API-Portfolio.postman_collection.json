@@ -1,0 +1,482 @@
+{
+  "info": {
+    "_postman_id": "25987449-f53b-4f6f-a33e-3c63a370c7b5",
+    "name": "Products API Portfolio",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56188306",
+    "_collection_link": "https://go.postman.co/collection/56188306-25987449-f53b-4f6f-a33e-3c63a370c7b5?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "GET - Products Pagination",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Limit is 10\", function () {\r",
+              "    pm.expect(response.limit).to.eql(10);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Skip is 30\", function () {\r",
+              "    pm.expect(response.skip).to.eql(30);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Products array has 10 items\", function () {\r",
+              "    pm.expect(response.products).to.be.an(\"array\");\r",
+              "    pm.expect(response.products.length).to.eql(10);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 1000ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products?limit=10&skip=30",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "10"
+            },
+            {
+              "key": "skip",
+              "value": "30"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Search Products",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Products array exists\", function () {\r",
+              "    pm.expect(response.products).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"At least one product is returned\", function () {\r",
+              "    pm.expect(response.products.length).to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Search returned matching products\", function () {\r",
+              "    response.products.forEach(product => {\r",
+              "        const text = (product.title + \" \" + product.description).toLowerCase();\r",
+              "        pm.expect(text).to.include(\"phone\");\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 1000ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/search?q=phone",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "phone"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Search Products No Results",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Products array exists\", function () {\r",
+              "    pm.expect(response.products).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"No products returned\", function () {\r",
+              "    pm.expect(response.products.length).to.eql(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Total products is 0\", function () {\r",
+              "    pm.expect(response.total).to.eql(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 1000ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/search?q=xyznotfound123",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "xyznotfound123"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Single Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "const schema = {\r",
+              "    type: \"object\",\r",
+              "\r",
+              "    required: [\r",
+              "        \"id\",\r",
+              "        \"title\",\r",
+              "        \"price\",\r",
+              "        \"category\",\r",
+              "        \"description\",\r",
+              "        \"images\"\r",
+              "    ],\r",
+              "\r",
+              "    properties: {\r",
+              "        id: {\r",
+              "            type: \"number\"\r",
+              "        },\r",
+              "\r",
+              "        title: {\r",
+              "            type: \"string\",\r",
+              "            minLength: 3,\r",
+              "            maxLength: 100\r",
+              "        },\r",
+              "\r",
+              "        price: {\r",
+              "            type: \"number\",\r",
+              "            minimum: 0,\r",
+              "            maximum: 10000\r",
+              "        },\r",
+              "\r",
+              "        category: {\r",
+              "            type: \"string\"\r",
+              "        },\r",
+              "\r",
+              "        description: {\r",
+              "            type: \"string\"\r",
+              "        },\r",
+              "\r",
+              "        images: {\r",
+              "            type: \"array\",\r",
+              "            minItems: 1,\r",
+              "            items: {\r",
+              "                type: \"string\",\r",
+              "                format: \"uri\"\r",
+              "    }\r",
+              "}\r",
+              "\r",
+              "    }\r",
+              "};\r",
+              "\r",
+              "pm.test(\"Response matches JSON Schema\", function () {\r",
+              "    pm.response.to.have.jsonSchema(schema);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Product ID is 10\", function () {\r",
+              "    pm.expect(response.id).to.eql(10);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Title exists\", function () {\r",
+              "    pm.expect(response.title).to.be.a(\"string\");\r",
+              "    pm.expect(response.title.length).to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Price is numeric\", function () {\r",
+              "    pm.expect(response.price).to.be.a(\"number\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Category is a string\", function () {\r",
+              "    pm.expect(response.category).to.be.a(\"string\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 1000ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+              "});\r",
+              "pm.test(\"Content-Type is application/json\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+              "        .to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Date header exists\", function () {\r",
+              "    pm.expect(pm.response.headers.has(\"Date\")).to.be.true;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response is compressed\", function () {\r",
+              "    pm.expect(pm.response.headers.has(\"Content-Encoding\")).to.be.true;\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/10",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "10"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Product Not Found",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {\r",
+              "    pm.response.to.have.status(404);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Error message exists\", function () {\r",
+              "    pm.expect(response.message).to.exist;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Error message contains 'not found'\", function () {\r",
+              "    pm.expect(response.message.toLowerCase()).to.include(\"not found\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Error message contains requested product ID\", function () {\r",
+              "    pm.expect(response.message).to.include(\"999999\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 1000ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/999999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "999999"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Products by Category",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Products array exists\", function () {\r",
+              "    pm.expect(response.products).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"At least one product is returned\", function () {\r",
+              "    pm.expect(response.products.length).to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Each product has numeric ID\", function () {\r",
+              "    response.products.forEach(product => {\r",
+              "        pm.expect(product.id).to.be.a(\"number\");\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Each product category is smartphones\", function () {\r",
+              "    response.products.forEach(product => {\r",
+              "        pm.expect(product.category).to.eql(\"smartphones\");\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 1000ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/category/smartphones",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "category",
+            "smartphones"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - All Categories",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Response is an array\", function () {\r",
+              "    pm.expect(response).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Categories array is not empty\", function () {\r",
+              "    pm.expect(response.length).to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Each category object is valid\", function () {\r",
+              "    response.forEach(category => {\r",
+              "        pm.expect(category.slug).to.be.a(\"string\");\r",
+              "        pm.expect(category.slug.length).to.be.above(0);\r",
+              "\r",
+              "        pm.expect(category.name).to.be.a(\"string\");\r",
+              "        pm.expect(category.name.length).to.be.above(0);\r",
+              "\r",
+              "        pm.expect(category.url).to.be.a(\"string\");\r",
+              "        pm.expect(category.url.length).to.be.above(0);\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 1000ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/categories",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "categories"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
